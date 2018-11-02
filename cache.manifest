@@ -1,0 +1,13 @@
+CACHE MANIFEST
+
+CACHE: 
+index.html
+style.css
+schedule.html
+bootstrap.min.css
+
+NETWORK:
+*
+
+FALLBACK:
+/ /error.html

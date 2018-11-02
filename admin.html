@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+      <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">-->
+      <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <title>Home - Wimbledon Championship</title>
+ 
+ <style type="text/css">
+
+.footer-part
+{
+  background-color: #00713d;
+  margin-top: 5%;
+}
+.copyright-part {
+  background-color: #00331b;
+  color: white;
+}
+.hr {
+  border-top: 2px solid #432581;
+}  
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #fff;
+  text-decoration: none;
+  background-color: #00713d;
+}
+
+
+/*footer navigation*/
+a {
+  color: #00331b;
+  text-decoration: none;
+}
+a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.logo {
+
+  animation-name: logo;
+  animation-duration: 3s;
+}
+
+@keyframes logo {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+.readmore-btn, .submit-btn, .seeProfile-btn {
+  background-color: #00713d;
+  color: white;
+}
+</style>
+
+  </head>
+
+<body style="background-color: lightgrey;">
+
+  <nav class="navbar navbar-expand-sm  navbar-dark navbar-expand-md" style="background-color: #00713d;">
+    
+      <a class="navbar-brand" href="wimbledon bootstrap.html">
+        <img src="pictures/logo.png" alt="Wimbledon logo" class="logo" style="width:45px;">
+      </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link " href ="index.html">Main</a>
+    </li>
+    
+    <li class="nav-item dropdown">      
+      <a class="nav-link dropdown-toggle" href="#matches"  data-toggle="dropdown">Matches</a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="schedule.html">Schedule</a>
+        <a class="dropdown-item" href="results.html">Results</a>
+        <a class="dropdown-item" href="players.html">Players</a>
+      </div>
+
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="news.html">News</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="fans.html">Fans</a>
+    </li>
+     <li class="nav-item">
+      <a class="nav-link" href="contacts.html">Contacts</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="admin.html">Admin</a>
+    </li>
+  </ul>
+</div>
+</nav>
+
+<div class="container">
+  <h1 class="h1">Add news</h1><hr class="hr">
+</div>
+
+
+ 
+  <div class="container" style="margin-top: 30px;">
+    <img class="img-fluid mx-auto" src="pictures/your image.jpg" alt="your image here" style="width: 200px;">
+    <form name="imageForm" onsubmit="return(validateImage())"> 
+      <div class="form-group">
+        <input type="file" class="form-control-file border" name="file">
+      </div>
+     <button type="submit" class="btn submit-btn">Add image</button>
+    </form> 
+  </div>
+ 
+
+ <form name="newsForm" onsubmit="return(validate());">
+   <div class="container" style="margin-top: 30px;">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="News title" name="title">
+    </div>
+    <div class="form-group">
+      <textarea type="text" class="form-control" placeholder="News text" name="text"></textarea>
+    </div>
+    <button type="submit" class="btn submit-btn">Add news</button>
+   </div>
+ </form>  
+
+
+<footer  class="page-footer font-small pt-4 footer-part">
+  
+    <div class="container text-center text-md-left">    
+      <div class="row">       
+        <div class="col-md-6 mt-md-0 mt-3">         
+          <h5 class="text-uppercase">Wimbledon Championship</h5>
+          <p>1 July - 14 July 2019</p>
+        </div>
+                
+        <div class="col-md-3 mb-md-0 mb-3">           
+            <h5 class="text-uppercase">Navigation</h5>
+            <ul class="list-unstyled">
+              <li>
+                <a href="index.html">Main</a>
+              </li>
+              <li>
+                <a href="schedule.html">Schedule</a>
+              </li>
+              <li>
+                <a href="results.html">Results</a>
+              </li>
+              <li>
+                <a href="players.html">Players</a>
+              </li>
+              <li>
+                <a href="news.html">News</a>
+              </li>
+              <li>
+                <a href="fans.html">Fans</a>
+              </li>
+            </ul>
+
+        </div>    
+        <div class="col-md-3 mb-md-0 mb-3">           
+            <a class="text-uppercase" href="contacts.html">Contacts us</a>
+        </div>      
+        </div>  
+
+    </div>
+          
+      <div class="footer-copyright text-center copyright-part">Copyright © Helen Bilianska 2018</a>
+    </div>
+
+</footer>
+
+      <script type="text/javascript">
+        // admin page validation.
+  //news title and text validation
+function validate()
+      {
+      
+         if( document.newsForm.title.value == "" )
+         {
+            alert( "Please add title!" );
+            document.newsForm.title.focus() ;
+            document.newsForm.title.style.border = "1px solid red";
+            return false;
+         }
+         if (document.newsForm.text.value == "")
+         {
+          alert('You have not added the text!')
+          document.newsForm.text.focus() ;
+          document.newsForm.text.style.border = "1px solid red";
+            return false;
+         } 
+         
+         alert('Your news is added!')
+         return true ;
+      }
+
+  // image validation
+function validateImage()
+      {
+      
+         if( document.imageForm.file.value == "" )
+         {
+            alert( "Please add image!" );
+            document.imageForm.file.focus() ;
+            
+            return false;
+         }
+         
+         
+         alert('Your image is added!');
+         return( true );
+      }
+
+      </script>
+      <!--<script type="text/javascript" src="js/script.js"></script>-->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+</body>
+</html>
