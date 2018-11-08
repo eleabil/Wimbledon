@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html manifest="cache.manifest">
   <head>
       <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
       <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">-->
@@ -151,7 +151,7 @@ a:hover {
                 </div>
             </div>
 
-            <div class="card col-sm-12 col-lg-12 mt-3 fan-appeal-card" id="appeal">
+            <div class="card col-sm-12 col-lg-12 mt-3 fan-appeal-card">
                 <div class="card-body fanbox-border" >
                     <p class="card-text">I am fan of tennis from since I was a child. I love watching Wimbledon Championship, and I do it every year.</p>
                     <div class="row">
@@ -179,7 +179,7 @@ a:hover {
                 <div class="form">
                     <textarea class="form-control" rows="5" cols="60" name="message_text" placeholder="Your text here" id="input_text_area"></textarea>
 
-                    <button class="btn submit-btn" type="button" onclick="addFanAppeal()">Add</button>
+                    <button class="btn submit-btn" type="button" onclick="addFans()">Add</button>
                 </div>
             </form>
         </div>
@@ -232,9 +232,58 @@ a:hover {
 
 </footer>
 
-      <script type="text/javascript">
-"use strict";
+    <script>
 
+        'use strict';
+        // lab 8 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        var useLocalStorage = false;
+
+        window.addEventListener('load', function () {
+            if (useLocalStorage) {
+                getFansFromLocalStorage()
+            }else {}
+        });
+
+        function getFansFromLocalStorage() {
+
+            if (localStorage.getItem('fans') === null) {
+                console.log('local storage is empty');
+            } else {
+                alert('local storage is not empty');
+                var text = localStorage.getItem("fans");
+                var template = document.getElementById("appeals");
+                template.innerHTML += "<div class=\"card col-sm-12 col-lg-12 mt-3 fan-appeal-card\" id=\"appeal\">\n" +
+                    "                <div class=\"card-body fanbox-border\" >\n" +
+                    "                    <p class=\"card-text\">" + text + "</p>\n" +
+                    "                    <div class=\"row\">\n" +
+                    "                        <div class=\"col-md-3\">" + getCurrentDate() + "</div>\n" +
+                    "                        <div class=\"col-md-8 col-md-offset fan-rightstr\">Username</div>\n" +
+                    "                    </div>\n" +
+                    "                </div>\n" +
+                    "            </div>";
+
+                document.getElementById("fan_appeal_form_id").reset();
+            }
+        }
+
+        function getCurrentDate() {
+            var currentdate = new Date();
+            var dd = currentdate.getDate();
+            var mm = currentdate.getMonth() + 1;
+            var yyyy = currentdate.getFullYear();
+
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            var datetime = dd + '.' + mm + '.' + yyyy;
+
+            return datetime
+        }
+/*
 function addFanAppeal() {
 
     var fail = false;
@@ -247,14 +296,12 @@ function addFanAppeal() {
     }
 
     if (fail) {
-        alert("You have not added the text!")
+        alert("You have not added the text!");
+        document.getElementById('input_text_area').focus();
     } else {
-        if (isOnline()){
-            localStorage.setItem('appeal_1', text);
-        }
-        
-        var pzk = document.getElementById("appeals");
-        pzk.innerHTML += "<div class=\"card col-sm-12 col-lg-12 mt-3 fan-appeal-card\" id=\"appeal\">\n" +
+
+        var template = document.getElementById("appeals");
+        template.innerHTML += "<div class=\"card col-sm-12 col-lg-12 mt-3 fan-appeal-card\" id=\"appeal\">\n" +
             "                <div class=\"card-body fanbox-border\" >\n" +
             "                    <p class=\"card-text\">" + text + "</p>\n" +
             "                    <div class=\"row\">\n" +
@@ -264,9 +311,8 @@ function addFanAppeal() {
             "                </div>\n" +
             "            </div>";
 
+        document.getElementById("fan_appeal_form_id").reset();
 
-        var input_form = document.forms["fan_appeal_form"];
-        input_form.reset();
     }
 
     return false;
@@ -289,15 +335,13 @@ function getCurrentDate() {
 
     return datetime
 }
- 
-function isOnline(){
-    return window.navigator.onLine;
-}
+
+*/
 
       </script>
  
-
-      <script type="text/javascript" src="script.js"></script>
+      <script src="js/fans.js"></script>
+      <script src="js/script.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
@@ -305,4 +349,22 @@ function isOnline(){
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
