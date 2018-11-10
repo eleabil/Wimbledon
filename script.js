@@ -68,7 +68,7 @@ function addNews() {
 function saveNewsToLocalStorage(newsObject) {
     console.log(newsObject);
     localStorage.setItem('news', JSON.stringify(newsObject));
-    alert("saved to local storage");
+    console.log("saved to local storage");
     document.getElementById("newsForm_id").reset();
 }
 
@@ -103,7 +103,7 @@ function addFans() {
 
     if (isFansValidate) {
         if (isOnline()) {
-
+            addFansIfOnline();
         } else {
             var fansAppeal = elements.message_text.value;
             saveFansToLocalStorage(fansAppeal);
@@ -113,14 +113,43 @@ function addFans() {
 }
 
 function saveFansToLocalStorage(fansObject) {
-    console.log(fansObject);
+    console.log("fansObject: " + fansObject);
     localStorage.setItem('fans', fansObject);
-    alert("saved to local storage");
+    console.log("saved to local storage");
 }
 
 function isOnline() {
     return window.navigator.onLine;
 }
 
+function addFansIfOnline() {
+    var fail = false;
+    var text = document.forms["fan_appeal_form"]["message_text"].value;
+    var currentDate = getCurrentDate();
+    if (text === "" || text === " ") {
+        fail = true
+    }
+    if (fail) {
+        alert("You have not added the text!");
+
+    } else {
+
+        var template = document.getElementById("appeals");
+        template.innerHTML += "<div class=\"card col-sm-12 col-lg-12 mt-3 fan-appeal-card\" id=\"appeal\">\n" +
+            "                <div class=\"card-body fanbox-border\" >\n" +
+            "                    <p class=\"card-text\">" + text + "</p>\n" +
+            "                    <div class=\"row\">\n" +
+            "                        <div class=\"col-md-3\">" + currentDate + "</div>\n" +
+            "                        <div class=\"col-md-8 col-md-offset fan-rightstr\">Username</div>\n" +
+            "                    </div>\n" +
+            "                </div>\n" +
+            "            </div>";
+        var input_form = document.forms["fan_appeal_form"];
+        input_form.reset();
+
+        saveFansToLocalStorage(text);
+    }
+    return false;
+}
 
 
