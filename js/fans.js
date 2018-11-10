@@ -9,14 +9,14 @@ window.addEventListener('load', function () {
 
 });
 
-window.addEventListener('load', function () {
+/*window.addEventListener('load', function () {
     getFansFromLocalStorage()
-});
+});*/
 
 function getFansFromLocalStorage() {
 
     if (localStorage.getItem('fans') === null) {
-        //console.log('local storage is empty');
+        console.log('local storage is empty');
     } else {
         alert('local storage is not empty');
         var text = localStorage.getItem("fans");
@@ -31,8 +31,7 @@ function getFansFromLocalStorage() {
             "                </div>\n" +
             "            </div>";
 
-        document.getElementById("fan_appeal_form_id").reset();
-
+        // document.getElementById("fan_appeal_form_id").reset();
     }
 }
 
@@ -41,6 +40,12 @@ function getCurrentDate() {
     var dd = currentdate.getDate();
     var mm = currentdate.getMonth() + 1;
     var yyyy = currentdate.getFullYear();
+    var hh = currentdate.getHours();
+    var min = currentdate.getMinutes();
+    if (min<10) {
+        min = '0' + min;
+    }
+    var time = hh + ':' + min;
 
     if (dd < 10) {
         dd = '0' + dd
@@ -48,8 +53,7 @@ function getCurrentDate() {
     if (mm < 10) {
         mm = '0' + mm
     }
-    var datetime = dd + '.' + mm + '.' + yyyy;
-
+    var datetime = dd + '.' + mm + '.' + yyyy + ' ' + time;
     return datetime
 }
 
@@ -58,10 +62,10 @@ function getAllFansFromIndexedDb() {
     var openRequest = indexedDB.open("wimbledon_db", 2);
 
     openRequest.onupgradeneeded = function (e) {
-        var thisDB = e.target.result;
+        var thisDb = e.target.result;
 
-        if (!thisDB.objectStoreNames.contains("fans")) {
-            thisDB.createObjectStore("fans", {autoIncrement: true});
+        if (!thisDb.objectStoreNames.contains("fans")) {
+            thisDb.createObjectStore("fans", {autoIncrement: true});
         }
 
         alert('onupgradeneeded')
@@ -71,16 +75,17 @@ function getAllFansFromIndexedDb() {
         alert("Running indexedDb success");
         db = e.target.result;
 
-        var s = "";
-
-        db.transaction(["fans"], "readonly").objectStore("fans").openCursor().onsuccess = function (e) {
+        var transaction = db.transaction(["fans"], "readonly");
+        transaction.objectStore("fans").openCursor().onsuccess = function (e) {
             var cursor = e.target.result;
+
+            var template = document.getElementById("appeals");
 
             if (cursor) {
 
-                for (var i in cursor.value) {
+               // for (var i in cursor.value) {
                     var fans = cursor.value;
-                    var template = document.getElementById("appeals");
+                    // var template = document.getElementById("appeals");
                     template.innerHTML += "<div class=\"card col-sm-12 col-lg-12 mt-3 fan-appeal-card\" id=\"appeal\">\n" +
                         "                <div class=\"card-body fanbox-border\" >\n" +
                         "                    <p class=\"card-text\">" + fans + "</p>\n" +
@@ -92,9 +97,7 @@ function getAllFansFromIndexedDb() {
                         "            </div>";
 
                     document.getElementById("fan_appeal_form_id").reset();
-                }
-
-
+                //}
                 cursor.continue();
             }
         }

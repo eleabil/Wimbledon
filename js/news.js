@@ -54,6 +54,7 @@ function getAllNewsFromIndexedDb() {
         db.transaction(["news"], "readonly").objectStore("news").openCursor().onsuccess = function (e) {
             var cursor = e.target.result;
 
+            var template = document.getElementById("allNews");
             if (cursor) {
 
                 // for(var i in cursor.value) {
@@ -62,7 +63,7 @@ function getAllNewsFromIndexedDb() {
                 console.log("News title: " + title);
                 console.log("News text: " + text);
 
-                var template = document.getElementById("allNews");
+
                 template.innerHTML += "<div class=\"card card-style\">" +
                     "   <div class=\"card-body\">" +
                     "   <h4 class=\"card-title\">" + title + "</h4>" +

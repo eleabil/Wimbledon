@@ -143,19 +143,20 @@ function addFans() {
 }
 
 
-function saveFansToIndexedDB(newsObj) {
+function saveFansToIndexedDB(fansObj) {
     var db;
-    alert('saveAppealToIndexedDB');
+    alert('save Appeal To IndexedDB');
     var openRequest = indexedDB.open("wimbledon_db", 2);
 // запускається лише раз при створенні БД і щоразу при оновленні весії БД
     openRequest.onupgradeneeded = function (e) { //e - event ф-ція, яка вертає івент (об'єкт БД, з якої ми можемо тягнути резльтат)
-        var thisDB = e.target.result;
+        var thisDb = e.target.result;
 
-        if (!thisDB.objectStoreNames.contains("fans")) {
-            thisDB.createObjectStore("fans", {autoIncrement: true}); //object store - сворити таблицю (news - назва таблиці)
+        if (!thisDb.objectStoreNames.contains("fans")) {
+            thisDb.createObjectStore("fans", {autoIncrement: true});
+             //object store - сворити таблицю (news - назва таблиці)
         }
 
-        console.log('onupgradeneeded')
+        alert('onupgradeneeded')
     };
 
     openRequest.onsuccess = function (e) { // виконується, якщо з'єднаня до БД є успішним
@@ -163,11 +164,10 @@ function saveFansToIndexedDB(newsObj) {
 
         db = e.target.result;
 
-
         var transaction = db.transaction(["fans"], "readwrite");
         var store = transaction.objectStore("fans"); // звертаємось таблиці з назвою news
 
-        var request = store.add(newsObj); // додає об'єкт в бд
+        var request = store.add(fansObj); // додає об'єкт в бд
 
         request.onerror = function (e) {
             console.log("Error", e.target.error.name);
