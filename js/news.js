@@ -1,21 +1,25 @@
-'use strict';
-// lab 8 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+var useLocalStorage = false;
 
 window.addEventListener('load', function () {
-    console.log("page is loaded!");
-    getNewsFromLocalStorage()
+    if (useLocalStorage) {
+        getNewsFromLocalStorage()
+    } else {
+        getAllNewsFromIndexedDb()
+    }
+
+});
+
+window.addEventListener('load', function () {
+        getNewsFromLocalStorage()
 });
 
 function getNewsFromLocalStorage() {
 
     if (localStorage.getItem('news') === null) {
-        alert('local storage is empty');
+        console.log('local storage is empty');
     } else {
-        alert('local storage is not empty');
-
+        console.log('local storage is not empty');
         var news = localStorage.getItem("news");
-
-        // var test = JSON.stringify(news);
         var newsTitle = JSON.parse(news);
         var title = newsTitle.newsTitle;
         var text = newsTitle.newsText;
@@ -25,30 +29,55 @@ function getNewsFromLocalStorage() {
             "   <div class=\"card-body\">" +
             "   <h4 class=\"card-title\">" + title + "</h4>" +
             "   <p class=\"card-text\">" + text + "</p>" + " </div>" +
-            "   <p class=\"card-text\">" + getCurrentDate() + "</p>" +
+            "   <p class=\"card-text\">" + "</p>" +
             "   </div>"
     }
 }
 
-function getCurrentDate() {
-    var currentdate = new Date();
-    var dd = currentdate.getDate();
-    var mm = currentdate.getMonth() + 1;
-    var yyyy = currentdate.getFullYear();
-    var hh = currentdate.getHours();
-    var min = currentdate.getMinutes();
-    if (min < 10) {
-        min = '0' + min;
-    }
-    var time = hh + ':' + min;
+function getAllNewsFromIndexedDb() {
+    var db;
+    var openRequest = indexedDB.open("wimbledon_db", 2);
+    console.log("getAllNewsFromIndexedDb() is started");
+    openRequest.onupgradeneeded = function (e) {
+        var thisDB = e.target.result;
 
-    if (dd < 10) {
-        dd = '0' + dd
-    }
-    if (mm < 10) {
-        mm = '0' + mm
-    }
-    var datetime = dd + '.' + mm + '.' + yyyy + ' ' + time;
+        if (!thisDB.objectStoreNames.contains("news")) {
+            thisDB.createObjectStore("news", {autoIncrement: true});
+        }
+        console.log('onupgradeneeded')
+    };
 
-    return datetime
+    openRequest.onsuccess = function (e) {
+        console.log("IndexedDB is running successfully");
+        db = e.target.result;
+
+        db.transaction(["news"], "readonly").objectStore("news").openCursor().onsuccess = function (e) {
+            var cursor = e.target.result;
+
+            if (cursor) {
+
+                // for(var i in cursor.value) {
+                var title = cursor.value.newsTitle;
+                var text = cursor.value.newsText;
+                console.log("News title: " + title);
+                console.log("News text: " + text);
+
+                var template = document.getElementById("allNews");
+                template.innerHTML += "<div class=\"card card-style\">" +
+                    "   <div class=\"card-body\">" +
+                    "   <h4 class=\"card-title\">" + title + "</h4>" +
+                    "   <p class=\"card-text\">" + text + "</p>" + " </div>" +
+                    "   <p class=\"card-text\">" + "</p>" +
+                    "   </div>"
+
+            }
+
+            cursor.continue();
+        }
+    };
+
+    openRequest.onerror = function (e) {
+        console.log("IndexedDB error: " + e);
+    };
+
 }
