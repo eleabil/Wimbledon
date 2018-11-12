@@ -36,7 +36,7 @@ function getNewsFromLocalStorage() {
 
 function getAllNewsFromIndexedDb() {
     var db;
-    var openRequest = indexedDB.open("wimbledon_db", 2);
+    var openRequest = indexedDB.open("wimbledon_db", 3);
     console.log("getAllNewsFromIndexedDb() is started");
     openRequest.onupgradeneeded = function (e) {
         var thisDB = e.target.result;
@@ -62,7 +62,6 @@ function getAllNewsFromIndexedDb() {
                 var text = cursor.value.newsText;
                 console.log("News title: " + title);
                 console.log("News text: " + text);
-
 
                 template.innerHTML += "<div class=\"card card-style\">" +
                     "   <div class=\"card-body\">" +

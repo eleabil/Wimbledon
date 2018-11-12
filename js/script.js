@@ -6,7 +6,7 @@ function sendDataToServer() {
 }
 
 window.addEventListener('load', function () {
-    alert("Page is loaded!");
+    console.log("Page is loaded!");
 
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
@@ -74,8 +74,8 @@ function addNews() {
 
     function saveNewsToIndexedDB(newsObj) {
         var db;
-        console.log('News is saved to IndexedDB');
-        var openRequest = indexedDB.open("wimbledon_db", 2);
+
+        var openRequest = indexedDB.open("wimbledon_db", 3);
 // запускається лише раз при створенні БД і щоразу при оновленні весії БД
         openRequest.onupgradeneeded = function (e) { //e - event ф-ція, яка вертає івент (об'єкт БД, з якої ми можемо тягнути резльтат)
             var thisDB = e.target.result;
@@ -83,7 +83,6 @@ function addNews() {
             if (!thisDB.objectStoreNames.contains("news")) {
                 thisDB.createObjectStore("news", {autoIncrement: true}); //object store - сворити таблицю (news - назва таблиці)
             }
-
             console.log('onupgradeneeded')
         };
 
@@ -142,11 +141,9 @@ function addFans() {
     }
 }
 
-
 function saveFansToIndexedDB(fansObj) {
     var db;
-    alert('save Appeal To IndexedDB');
-    var openRequest = indexedDB.open("wimbledon_db", 2);
+    var openRequest = indexedDB.open("wimbledon_db", 3);
 // запускається лише раз при створенні БД і щоразу при оновленні весії БД
     openRequest.onupgradeneeded = function (e) { //e - event ф-ція, яка вертає івент (об'єкт БД, з якої ми можемо тягнути резльтат)
         var thisDb = e.target.result;
@@ -155,7 +152,6 @@ function saveFansToIndexedDB(fansObj) {
             thisDb.createObjectStore("fans", {autoIncrement: true});
              //object store - сворити таблицю (news - назва таблиці)
         }
-
         alert('onupgradeneeded')
     };
 
