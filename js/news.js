@@ -1,17 +1,23 @@
 var useLocalStorage = false;
 
 window.addEventListener('load', function () {
-    if (useLocalStorage) {
-        getNewsFromLocalStorage()
-    } else {
-        getAllNewsFromIndexedDb()
+    getData()
+
+});
+
+function getData() {
+    alert("getData");
+    if (isOnline()) {
+        getNewsFromServer()
     }
-
-});
-
-window.addEventListener('load', function () {
-        getNewsFromLocalStorage()
-});
+    else {
+        if (useLocalStorage) {
+            getNewsFromLocalStorage()
+        } else {
+            getAllNewsFromIndexedDb()
+        }
+    }
+}
 
 function getNewsFromLocalStorage() {
 
@@ -80,4 +86,37 @@ function getAllNewsFromIndexedDb() {
         console.log("IndexedDB error: " + e);
     };
 
+}
+
+
+
+function getNewsFromServer() {
+    let url = 'http://localhost:3012/news';
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+
+            for (i in data) {
+
+                var template = document.getElementById("allNews");
+                template.innerHTML += "<div class=\"card card-style\">" +
+                    "   <div class=\"card-body\">" +
+                    "   <h4 class=\"card-title\">" + data[i].title + "</h4>" +
+                    "   <p class=\"card-text\">" + data[i].text + "</p>" + " </div>" +
+                    "   <p class=\"card-text\">" + "</p>" +
+                    "   </div>"
+
+
+                alert(data[i]);
+            }
+
+            console.log(data);// Prints result from `response.json()`
+        })
+        .catch(error => console.error(error));
+}
+
+window.addEventListener('online', getData);
+
+function isOnline() {
+    return window.navigator.onLine;
 }

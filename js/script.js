@@ -2,9 +2,6 @@
 
 var useLocalStorage = false;
 
-function sendDataToServer() {
-}
-
 window.addEventListener('load', function () {
     console.log("Page is loaded!");
 
@@ -18,7 +15,7 @@ window.addEventListener('load', function () {
                 console.log('no item to load')
             } else {
                 var unsavedItem = localStorage.getItem('news');
-                sendDataToServer(unsavedItem);
+                sendNewsToServer(unsavedItem);
                 localStorage.removeItem('news')
             }
         } else {
@@ -53,20 +50,17 @@ function addNews() {
     } else {
         isNewsValidate = true;
     }
+var news = new NewsObject(elements.title.value, elements.text.value)
 
     if (isTitleValidate && isNewsValidate) {
-        if (!isOnline()) {
-
+        if (isOnline()) {
+            sendNewsToServer(news)
         } else {
-            var newsObject = {
-                "newsTitle": elements.title.value,
-                "newsText": elements.text.value
-            };
 
             if (useLocalStorage) {
-                saveNewsToLocalStorage(newsObject)
+                saveNewsToLocalStorage(news)
             } else {
-                saveNewsToIndexedDB(newsObject);
+                saveNewsToIndexedDB(news);
                 document.getElementById("newsForm_id").reset();
             }
         }
@@ -127,14 +121,26 @@ function addFans() {
     }
 
     if (isFansValidate) {
-        if (!isOnline()) {
 
+        var appeal = new AppealObject(elements.message_text.value);
+
+        if (isOnline()) {
+            sendAppealToServer(appeal);
+            var template = document.getElementById("appeals");
+            template.innerHTML += "<div class=\"card col-sm-12 col-lg-12 mt-3 fan-appeal-card\" id=\"appeal\">\n" +
+                "                <div class=\"card-body fanbox-border\" >\n" +
+                "                    <p class=\"card-text\">" + appeal.appeal + "</p>\n" +
+                "                    <div class=\"row\">\n" +
+                "                        <div class=\"col-md-3\">" + getCurrentDate() + "</div>\n" +
+                "                        <div class=\"col-md-8 col-md-offset fan-rightstr\">Username</div>\n" +
+                "                    </div>\n" +
+                "                </div>\n" +
+                "            </div>";
         } else {
-            var fansAppeal = elements.message_text.value;
             if (useLocalStorage) {
-                saveFansToLocalStorage(fansAppeal)
+                saveFansToLocalStorage(appeal)
             } else {
-                saveFansToIndexedDB(fansAppeal);
+                saveFansToIndexedDB(appeal);
                 document.getElementById("fan_appeal_form_id").reset();
             }
         }
@@ -211,5 +217,64 @@ function isOnline() {
     return window.navigator.onLine;
 }
 
+
+
+
+
+
+function sendNewsToServer(data) {
+    let url = 'http://localhost:3012/news'; //шлях на сервер
+
+    postRequest(url, data)
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
+
+    function postRequest(url, data) {
+        return fetch(url, {    //fetch - новий аналог XMLHTTPRequest, щоб подавати CRUD запити на сервер,
+            credentials: 'same-origin',   // перший параметр fetch - адреса сервера, другий - характеристики запиту (об'єкт, вид запиту (пост).. тощо)
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: new Headers({         //вказуємо в якому форматі даних ми передаємо об'єк для збереження на сервер
+                'Content-Type': 'application/json'
+            }),
+        })
+            .then(response => response.json())  //виконується звернення до сервера
+    }
+
+}
+
+function sendAppealToServer(data) {
+    let url = 'http://localhost:3012/appeals';  //адреса сервера, до якого будуть подаватися запити
+
+    postRequest(url, data)
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
+
+    function postRequest(url, data) {
+        return fetch(url, {
+            credentials: 'same-origin',
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+        })
+            .then(response => response.json())
+    }
+
+}
+
+class NewsObject {
+    constructor(title, text) {
+        this.title = title;
+        this.text = text;
+    }
+}
+
+class AppealObject {
+    constructor(appeal) {
+        this.appeal = appeal;
+    }
+}
 
 

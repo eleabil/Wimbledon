@@ -2,17 +2,24 @@
 var useLocalStorage = false;
 
 window.addEventListener('load', function () {
-    if (useLocalStorage) {
-        getFansFromLocalStorage()
-    } else {
-        getAllFansFromIndexedDb()
-    }
+    getData()
 
 });
 
-/*window.addEventListener('load', function () {
-    getFansFromLocalStorage()
-});*/
+function getData() {
+    alert("getData");
+    if (isOnline()) {
+        getAppealFromServer()
+    }
+    else {
+        if (useLocalStorage) {
+            getFansFromLocalStorage()
+        } else {
+            getAllFansFromIndexedDb()
+        }
+    }
+}
+
 
 function getFansFromLocalStorage() {
 
@@ -108,4 +115,42 @@ function getAllFansFromIndexedDb() {
         alert('Running indexedDb error: ' + e)
     };
 
+}
+
+
+
+
+
+
+function getAppealFromServer() {
+    let url = 'http://localhost:3012/appeals';
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+
+            for (i in data) {
+                var template = document.getElementById("appeals");
+                template.innerHTML += "<div class=\"card col-sm-12 col-lg-12 mt-3 fan-appeal-card\" id=\"appeal\">\n" +
+                    "                <div class=\"card-body fanbox-border\" >\n" +
+                    "                    <p class=\"card-text\">" + data[i].appeal + "</p>\n" +
+                    "                    <div class=\"row\">\n" +
+                    "                        <div class=\"col-md-3\">" + getCurrentDate() + "</div>\n" +
+                    "                        <div class=\"col-md-8 col-md-offset fan-rightstr\">Username</div>\n" +
+                    "                    </div>\n" +
+                    "                </div>\n" +
+                    "            </div>";
+
+                alert(data[i]);
+            }
+
+            console.log(data);// Prints result from `response.json()`
+        })
+        .catch(error => console.error(error));
+}
+
+
+window.addEventListener('online', getData);
+
+function isOnline() {
+    return window.navigator.onLine;
 }
